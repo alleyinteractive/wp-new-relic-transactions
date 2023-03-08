@@ -19,6 +19,7 @@
     },
     "require-dev": {
         "alleyinteractive/alley-coding-standards": "^1.0",
+        "alleyinteractive/composer-wordpress-autoloader": "^1.0",
         "mantle-framework/testkit": "^0.9",
         "nunomaduro/collision": "^5.0"
     },
@@ -29,6 +30,13 @@
             "pestphp/pest-plugin": true
         },
         "sort-packages": true
+    },
+    "extra": {
+        "wordpress-autoloader": {
+            "autoload-dev": {
+                "Alley\\WP_New_Relic_Transactions\\Tests\\": "tests"
+            }
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
