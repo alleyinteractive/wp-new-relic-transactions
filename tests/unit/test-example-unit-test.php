@@ -1,5 +1,5 @@
 <?php
-namespace Create_WordPress_Plugin\Tests\Unit;
+namespace Alley\WP_New_Relic_Transactions\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 

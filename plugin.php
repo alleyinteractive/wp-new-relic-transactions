@@ -1,21 +1,21 @@
 <?php
 /**
- * Plugin Name: Create WordPress Plugin
- * Plugin URI: https://github.com/alleyinteractive/create-wordpress-plugin
- * Description: A skeleton WordPress plugin
+ * Plugin Name: WP New Relic Transactions
+ * Plugin URI: https://github.com/alleyinteractive/wp-new-relic-transactions
+ * Description: A companion plugin when using New Relic with WordPress, to improve the recorded transaction data.
  * Version: 0.1.0
- * Author: author_name
- * Author URI: https://github.com/alleyinteractive/create-wordpress-plugin
+ * Author: Matthew Boynes
+ * Author URI: https://github.com/alleyinteractive/wp-new-relic-transactions
  * Requires at least: 5.9
  * Tested up to: 6.1.1
  *
- * Text Domain: create-wordpress-plugin
+ * Text Domain: wp-new-relic-transactions
  * Domain Path: /languages/
  *
- * @package create-wordpress-plugin
+ * @package wp-new-relic-transactions
  */
 
-namespace Create_WordPress_Plugin;
+namespace Alley\WP_New_Relic_Transactions;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,35 +26,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @var string
  */
-define( 'CREATE_WORDPRESS_PLUGIN_DIR', __DIR__ );
-
-// Check if Composer is installed (remove if Composer is not required for your plugin).
-if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-	\add_action(
-		'admin_notices',
-		function() {
-			?>
-			<div class="notice notice-error">
-				<p><?php esc_html_e( 'Composer is not installed and create-wordpress-plugin cannot load. Try using a `*-built` branch if the plugin is being loaded as a submodule.', 'create-wordpress-plugin' ); ?></p>
-			</div>
-			<?php
-		}
-	);
-
-	return;
-}
-
-// Load Composer dependencies.
-require_once __DIR__ . '/vendor/autoload.php';
+define( 'WP_NEW_RELIC_TRANSACTIONS_DIR', __DIR__ );
 
 // Load the plugin's main files.
-require_once __DIR__ . '/src/assets.php';
-require_once __DIR__ . '/src/meta.php';
+require_once WP_NEW_RELIC_TRANSACTIONS_DIR . '/src/class-wp-new-relic-transactions.php';
 
 /**
  * Instantiate the plugin.
  */
 function main() {
-	// ...
+	$app = new WP_New_Relic_Transactions();
+	/**
+	 * Announce that the plugin has been initialized and share the instance.
+	 *
+	 * @param WP_New_Relic_Transactions $app Plugin class instance.
+	 */
+	do_action( 'wp_new_relic_transactions_init', $app );
 }
-main();
+add_action( 'after_setup_theme', __NAMESPACE__ . '\main' );

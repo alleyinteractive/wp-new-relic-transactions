@@ -1,6 +1,6 @@
 <?php
 /**
- * create-wordpress-plugin Test Bootstrap
+ * wp-new-relic-transactions Test Bootstrap
  */
 
 /**

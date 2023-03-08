@@ -1,7 +1,7 @@
 <?php
-namespace Create_WordPress_Plugin\Tests\Feature;
+namespace Alley\WP_New_Relic_Transactions\Tests\Feature;
 
-use Create_WordPress_Plugin\Tests\Test_Case;
+use Alley\WP_New_Relic_Transactions\Tests\Test_Case;
 
 /**
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
