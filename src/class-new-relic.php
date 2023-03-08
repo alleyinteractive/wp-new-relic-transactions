@@ -1,7 +1,15 @@
 <?php
+/**
+ * New_Relic class
+ *
+ * @package wp-new-relic-transactions
+ */
 
 namespace Alley\WP_New_Relic_Transactions;
 
+/**
+ * New Relic wrapper.
+ */
 class New_Relic implements With_New_Relic {
 
 	/**
@@ -11,8 +19,8 @@ class New_Relic implements With_New_Relic {
 	 */
 	public function is_supported(): bool {
 		return extension_loaded( 'newrelic' )
-		       && function_exists( 'newrelic_add_custom_parameter' )
-		       && function_exists( 'newrelic_name_transaction' );
+			&& function_exists( 'newrelic_add_custom_parameter' )
+			&& function_exists( 'newrelic_name_transaction' );
 	}
 
 	/**

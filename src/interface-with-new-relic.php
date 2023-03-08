@@ -1,4 +1,9 @@
 <?php
+/**
+ * With_New_Relic Interface
+ *
+ * @package wp-new-relic-transactions
+ */
 
 namespace Alley\WP_New_Relic_Transactions;
 
