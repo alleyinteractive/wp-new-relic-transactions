@@ -17,7 +17,7 @@ License: GPL v2 or later
 [![Coding Standards](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/coding-standards.yml)
 [![Testing Suite](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/unit-test.yml/badge.svg)](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/unit-test.yml)
 
-A companion plugin when using New Relic with WordPress, to improve the recorded transaction data..
+A companion plugin when using New Relic with WordPress, to improve the recorded transaction data.
 
 ## Installation
 
@@ -29,60 +29,44 @@ composer require alleyinteractive/wp-new-relic-transactions
 
 ## Usage
 
-Activate the plugin in WordPress and use it like so:
+Simply activate the plugin in WordPress, no further action is necessary.
 
-```php
-$plugin = Alley\WP_New_Relic_Transactions\WP_New_Relic_Transactions\WP_New_Relic_Transactions();
-$plugin->perform_magic();
-```
-<!--front-end-->
-## Testing
+## Transaction Names and Params
 
-Run `npm run test` to run Jest tests against JavaScript files. Run
-`npm run test:watch` to keep the test runner open and watching for changes.
+This plugin will name the requests, and apply the given custom attributes/parameters:
 
-Run `npm run lint` to run ESLint against all JavaScript files. Linting will also
-happen when running development or production builds.
+| Request type            | Transaction Name                                                  |
+|-------------------------|-------------------------------------------------------------------|
+| homepage and front page | `homepage`                                                        |
+| feed                    | `feed` or `feed.{feed type}`                                      |
+| embed                   | `embed`<br/>Param: `embed`                                        |
+| 404                     | `error.404`                                                       |
+| search                  | `search`<br/>Param: `s`                                           |
+| privacy policy          | `privacy_policy`                                                  |
+| post type archive       | `archive.post_type.{post type}`                                   |
+| taxonomy archive        | `taxonomy` or `taxonomy.{taxonomy}`<br/>Params: `term_id`, `slug` |
+| attachment              | `attachment`                                                      |
+| single post             | `post` or `post.{post type}`<br/>Param: `post_id`                 |
+| author archive          | `archive.author`                                                  |
+| date archive            | `archive.date`                                                    |
+| misc archive            | `archive`                                                         |
+| REST API request        | `{VERB} {Route}`<br/>Params: `wp-api = true`, `wp-api-route`      |
 
-Run `composer test` to run tests against PHPUnit and the PHP code in the plugin.
+### REST API Request Names
 
-### The `entries` directory and entry points
+REST API requests get a special formatting. When possible, dynamic portions of the
+URL are replaced with angle brackets surrounding the name of the parameter. Further,
+the HTTP verb is included in the name.
 
-All directories created in the `entries` directory can serve as entry points and will be compiled with [@wordpress/scripts](https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/README.md#scripts) into the `build` directory with an accompanied `index.asset.php` asset map.
+For instance: `GET /wp/v2/posts/\<id\>`
 
-#### Enqueuing Entry Points
+### Additional Custom Attributes
 
-You can also include an `index.php` file in the entry point directory for enqueueing or registering a script. This file will then be moved to the build directory and will be auto-loaded with the `load_scripts()` function in the `functions.php` file. Alternatively, if a script is to be enqueued elsewhere there are helper functions in the `src/assets.php` file for getting the assets.
+In addition to the above, requests should also include the following attributes/parameters for non-REST requests:
 
-### Scaffold a block with `create-block`
-
-Use the `create-block` command to create custom blocks with [`@wordpress/create-block`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/) and follow the prompts to generate all the block assets in the `blocks/` directory.
-Block registration, script creation, etc will be scaffolded from the `bin/create-block/templates/block/` templates. Run `npm run build` to compile and build the custom block. Blocks are enqueued using the `load_scripts()` function in `src/assets.php`.
-
-### Updating WP Dependencies
-
-Update the [WordPress dependency packages](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#packages-update) used in the project to their latest version.
-
-To update `@wordpress` dependencies to their latest version use the packages-update command:
-
-```sh
-npx wp-scripts packages-update
-```
-
-This script provides the following custom options:
-
--   `--dist-tag` – allows specifying a custom dist-tag when updating npm packages. Defaults to `latest`. This is especially useful when using [`@wordpress/dependency-extraction-webpack-plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin). It lets installing the npm dependencies at versions used by the given WordPress major version for local testing, etc. Example:
-
-```sh
-npx wp-scripts packages-update --dist-tag=wp-WPVERSION`
-```
-
-Where `WPVERSION` is the version of WordPress you are targeting. The version
-must include both the major and minor version (e.g., `6.1`). For example:
-
-```sh
-npx wp-scripts packages-update --dist-tag=wp-6.1`
-```
+* `logged-in`: Is the user logged in or not
+* `paged`: `true` if the request is paged
+* `page`: The page number if the request is paged
 
 ## Changelog
 
@@ -94,7 +78,7 @@ This project is actively maintained by [Alley
 Interactive](https://github.com/alleyinteractive). Like what you see? [Come work
 with us](https://alley.co/careers/).
 
-- [Matthew Boynes](https://github.com/Matthew Boynes)
+- [Matthew Boynes](https://github.com/mboynes)
 - [All Contributors](../../contributors)
 
 ## License
