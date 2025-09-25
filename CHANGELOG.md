@@ -5,6 +5,8 @@ All notable changes to `WP New Relic Transactions` will be documented in this fi
 ## 0.2.0
 
 - Add redirect transaction naming.
+- Add cron and wp-cli transaction naming.
+- Include WP-CLI command arguments as a custom parameter.
 
 ## 0.1.0 - 2023-03-08
 
