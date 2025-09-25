@@ -41,6 +41,7 @@
         "phpcbf": "phpcbf .",
         "phpcs": "phpcs .",
         "phpunit": "phpunit",
+        "release": "npx @alleyinteractive/create-release@latest",
         "test": [
             "@phpcs",
             "@phpunit"
