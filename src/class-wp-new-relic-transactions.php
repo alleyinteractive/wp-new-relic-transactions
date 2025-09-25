@@ -102,10 +102,9 @@ class WP_New_Relic_Transactions {
 	 * @param WP_REST_Request $request         Request used to generate the
 	 *                                         response.
 	 * @param string          $route           Route matched for the request.
-	 * @param array           $handler         Route handler used for the request.
 	 * @return mixed Unaltered `$dispatch_result`.
 	 */
-	public function rest_routes( $dispatch_result, $request, $route, $handler ) {
+	public function rest_routes( $dispatch_result, $request, $route ) {
 		if (
 			! $this->named
 			&& defined( 'REST_REQUEST' )

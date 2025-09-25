@@ -1,12 +1,12 @@
 <?php
 namespace Alley\WP_New_Relic_Transactions\Tests\Feature;
 
-use Alley\WP_New_Relic_Transactions\Tests\Test_Case;
+use Alley\WP_New_Relic_Transactions\Tests\TestCase;
 
 /**
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
  */
-class RequestsTest extends Test_Case {
+class RequestsTest extends TestCase {
 	protected $nr;
 
 	protected function setUp(): void {

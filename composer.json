@@ -30,11 +30,9 @@
         },
         "sort-packages": true
     },
-    "extra": {
-        "wordpress-autoloader": {
-            "autoload-dev": {
-                "Alley\\WP_New_Relic_Transactions\\Tests\\": "tests"
-            }
+    "autoload-dev": {
+        "psr-4": {
+            "Alley\\WP_New_Relic_Transactions\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
