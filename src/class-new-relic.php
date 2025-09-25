@@ -54,4 +54,11 @@ class New_Relic implements With_New_Relic {
 	public function background_job( bool $flag ): void {
 		newrelic_background_job( $flag );
 	}
+
+	/**
+	 * Ignore the current transaction in Apdex calculations.
+	 */
+	public function ignore_apdex(): void {
+		newrelic_ignore_apdex();
+	}
 }

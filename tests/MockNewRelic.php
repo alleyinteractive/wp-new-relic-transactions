@@ -48,4 +48,11 @@ class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 	public function background_job( bool $flag ): void {
 		$this->is_background_job = $flag;
 	}
+
+	/**
+	 * Ignore the current transaction in Apdex calculations.
+	 */
+	public function ignore_apdex(): void {
+		// No-op.
+	}
 }

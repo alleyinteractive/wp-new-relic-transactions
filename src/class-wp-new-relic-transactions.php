@@ -162,7 +162,9 @@ class WP_New_Relic_Transactions {
 
 		if ( wp_doing_cron() ) {
 			$this->name_transaction( 'wp-cron' );
+
 			$this->new_relic->background_job( true );
+			$this->new_relic->ignore_apdex();
 
 			return;
 		}

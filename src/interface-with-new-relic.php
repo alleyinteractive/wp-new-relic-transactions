@@ -40,4 +40,9 @@ interface With_New_Relic {
 	 *                   If false is passed, the transaction is marked as a web transaction.
 	 */
 	public function background_job( bool $flag ): void;
+
+	/**
+	 * Ignore the current transaction in Apdex calculations.
+	 */
+	public function ignore_apdex(): void;
 }
