@@ -48,6 +48,10 @@ class WP_New_Relic_Transactions {
 		add_filter( 'rest_dispatch_request', [ $this, 'rest_routes' ], 10, 4 );
 		add_action( 'wp', [ $this, 'process_wp' ] );
 		add_filter( 'x_redirect_by', [ $this, 'process_redirect' ], PHP_INT_MAX, 3 );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			$this->process_wp_cli();
+		}
 	}
 
 	/**
@@ -161,13 +165,11 @@ class WP_New_Relic_Transactions {
 		}
 
 		if ( wp_doing_cron() ) {
-			$this->name_transaction( 'wp-cron' );
-
-			$this->new_relic->background_job( true );
-			$this->new_relic->ignore_apdex();
-
+			$this->process_wp_cron();
 			return;
 		}
+
+		 // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if (
 			! empty( $wp->query_vars['rest_route'] )
@@ -264,6 +266,52 @@ class WP_New_Relic_Transactions {
 		if ( ! empty( $params ) ) {
 			$this->add_custom_parameters( $params );
 		}
+	}
+
+	/**
+	 * Process cron requests.
+	 */
+	protected function process_wp_cron(): void {
+		$this->name_transaction( 'wp-cron' );
+
+		$this->new_relic->background_job( true );
+		$this->new_relic->ignore_apdex();
+	}
+
+	/**
+	 * Process WP-CLI requests.
+	 *
+	 * Sets the transaction name to 'wp-cli' and adds a custom parameter 'wp-cli-cmd'
+	 * with the full WP-CLI command being executed (excluding options and flags).
+	 *
+	 * @see \wpcom_vip_wpcli_for_newrelic()
+	 */
+	protected function process_wp_cli(): void {
+		// Skip if VIP's WP-CLI integration is active.
+		if ( function_exists( 'wpcom_vip_wpcli_for_newrelic' ) ) {
+			return;
+		}
+
+		if ( class_exists( \WP_CLI::class ) ) {
+			$wp_cli_arguments = \WP_CLI::get_runner()->arguments ?? null;
+
+			if ( ! empty( $wp_cli_arguments ) ) {
+				if ( ! is_array( $wp_cli_arguments ) ) {
+					$wp_cli_arguments = [ $wp_cli_arguments ];
+				}
+
+				array_unshift( $wp_cli_arguments, 'wp' );
+
+				$cmd = implode( ' ', $wp_cli_arguments );
+
+				$this->add_custom_parameters( [ 'wp-cli-cmd' => $cmd ] );
+			}
+		}
+
+		$this->name_transaction( 'wp-cli' );
+
+		$this->new_relic->background_job( true );
+		$this->new_relic->ignore_apdex();
 	}
 
 	/**
