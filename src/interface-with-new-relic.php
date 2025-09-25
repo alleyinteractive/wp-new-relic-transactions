@@ -32,4 +32,12 @@ interface With_New_Relic {
 	 * @return bool Returns true if the parameter was added successfully.
 	 */
 	public function add_custom_parameter( string $key, bool|float|int|string $value ): bool;
+
+	/**
+	 * Marks the current transaction as a background job.
+	 *
+	 * @param bool $flag Whether to mark the current transaction as a background job.
+	 *                   If false is passed, the transaction is marked as a web transaction.
+	 */
+	public function background_job( bool $flag ): void;
 }

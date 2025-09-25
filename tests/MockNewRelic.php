@@ -6,6 +6,7 @@ class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 
 	public string $name;
 	public array $params = [];
+	public bool $is_background_job = false;
 
 	/**
 	 * @inheritDoc
@@ -36,5 +37,15 @@ class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 	public function reset(): void {
 		unset( $this->name );
 		$this->params = [];
+	}
+
+	/**
+	 * Marks the current transaction as a background job.
+	 *
+	 * @param bool $flag Whether to mark the current transaction as a background job.
+	 *                   If false is passed, the transaction is marked as a web transaction.
+	 */
+	public function background_job( bool $flag ): void {
+		$this->is_background_job = $flag;
 	}
 }

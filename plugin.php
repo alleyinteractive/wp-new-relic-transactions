@@ -44,7 +44,7 @@ function main(): void {
 	if ( ! $new_relic instanceof With_New_Relic ) {
 		_doing_it_wrong(
 			__NAMESPACE__ . '\main',
-			__( 'The New Relic wrapper must implement the With_New_Relic interface.', 'wp-new-relic-transactions' ),
+			esc_html__( 'The New Relic wrapper must implement the With_New_Relic interface.', 'wp-new-relic-transactions' ),
 			'0.2.0',
 		);
 

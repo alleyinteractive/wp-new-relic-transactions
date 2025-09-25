@@ -121,10 +121,13 @@ class WP_New_Relic_Transactions {
 				);
 				$this->name_transaction( $name );
 				$this->add_custom_parameters(
-					[
-						'wp-api'       => 'true',
-						'wp-api-route' => $route,
-					]
+					array_merge(
+						$this->get_default_parameters(),
+						[
+							'wp-api'       => 'true',
+							'wp-api-route' => $route,
+						],
+					),
 				);
 			}
 		}
@@ -157,17 +160,23 @@ class WP_New_Relic_Transactions {
 			return;
 		}
 
+		if ( wp_doing_cron() ) {
+			$this->name_transaction( 'wp-cron' );
+			$this->new_relic->background_job( true );
+
+			return;
+		}
+
 		if (
 			! empty( $wp->query_vars['rest_route'] )
 			|| is_admin()
-			|| wp_doing_cron()
 			|| ( defined( 'WP_CLI' ) && WP_CLI )
 		) {
 			return;
 		}
 
 		$name   = '';
-		$params = [];
+		$params = $this->get_default_parameters();
 
 		switch ( true ) {
 			case is_feed():
@@ -253,5 +262,18 @@ class WP_New_Relic_Transactions {
 		if ( ! empty( $params ) ) {
 			$this->add_custom_parameters( $params );
 		}
+	}
+
+	/**
+	 * Get default parameters to add to the transaction.
+	 *
+	 * @return array<string, bool|string>
+	 */
+	protected function get_default_parameters(): array {
+		return [
+			'HTTP_REFERER'    => $_SERVER['HTTP_REFERER'] ?? '',        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? '',  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+			'HTTPS'           => is_ssl(),
+		];
 	}
 }
