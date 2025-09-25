@@ -6,7 +6,7 @@ use Alley\WP_New_Relic_Transactions\Tests\Test_Case;
 /**
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
  */
-class Requests_Test extends Test_Case {
+class RequestsTest extends Test_Case {
 	protected $nr;
 
 	protected function setUp(): void {
