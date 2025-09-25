@@ -263,9 +263,7 @@ class WP_New_Relic_Transactions {
 			$this->name_transaction( $name );
 		}
 
-		if ( ! empty( $params ) ) {
-			$this->add_custom_parameters( $params );
-		}
+		$this->add_custom_parameters( $params );
 	}
 
 	/**
