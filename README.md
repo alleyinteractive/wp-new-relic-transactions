@@ -8,9 +8,9 @@ Stable tag: 0.1.0
 
 Requires at least: 5.9
 
-Tested up to: 6.1
+Tested up to: 6.8
 
-Requires PHP: 8.0
+Requires PHP: 8.2
 
 License: GPL v2 or later
 
