@@ -41,6 +41,16 @@ function main(): void {
 	 */
 	$new_relic = apply_filters( 'wp_new_relic_transactions_wrapper', new New_Relic() );
 
+	if ( ! $new_relic instanceof With_New_Relic ) {
+		_doing_it_wrong(
+			__NAMESPACE__ . '\main',
+			__( 'The New Relic wrapper must implement the With_New_Relic interface.', 'wp-new-relic-transactions' ),
+			'0.2.0',
+		);
+
+		return;
+	}
+
 	// Create the core plugin object.
 	$plugin = new WP_New_Relic_Transactions( $new_relic );
 
