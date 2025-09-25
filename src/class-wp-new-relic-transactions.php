@@ -135,19 +135,14 @@ class WP_New_Relic_Transactions {
 	/**
 	 * Add redirect transaction.
 	 *
-	 * @param string|false $x_redirect_by
-	 * @param int $status
-	 * @param string $location
+	 * @param string|false $x_redirect_by The value of the X-Redirect-By header, or false if not set.
+	 * @param int          $status HTTP status code.
+	 * @param string       $location The redirect location.
 	 * @return string|false
 	 */
-	public function redirects( $x_redirect_by, $status, $location )
-	{
+	public function redirects( $x_redirect_by, $status, $location ) {
 		$this->name_transaction( sprintf( 'redirect.%s', $status ) );
-		$this->add_custom_parameters(
-			[
-				'redirect-location' => $location,
-			]
-		);
+		$this->add_custom_parameters( [ 'redirect-location' => $location ] );
 
 		return $x_redirect_by;
 	}
