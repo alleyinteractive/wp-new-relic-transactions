@@ -20,6 +20,14 @@ class RequestsTest extends TestCase {
 		$this->expectApplied( 'wp_new_relic_transactions_name' )
 		     ->once()
 		     ->with( 'homepage' );
+		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
+		     ->once()
+		     ->with( [
+				'HTTP_REFERER'    => '',
+				'HTTP_USER_AGENT' => '',
+				'HTTPS'           => false,
+				'logged-in'      => false,
+		     ] );
 		$this->get( '/' );
 
 		$this->assertSame( 'homepage', $this->nr->name );
@@ -34,13 +42,39 @@ class RequestsTest extends TestCase {
 		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
 		     ->once()
 		     ->with( [
-				 'post_id' => $post->ID,
-				 'logged-in' => false,
+				'HTTP_REFERER'    => '',
+				'HTTP_USER_AGENT' => '',
+				'HTTPS'           => false,
+				 'post_id'        => $post->ID,
+				 'logged-in'      => false,
 		     ] );
 		$this->get( $post );
 
 		$this->assertSame( 'post', $this->nr->name );
 		$this->assertSame( $post->ID, $this->nr->params['post_id'] );
+	}
+
+	public function test_logged_in(): void {
+		$this->acting_as( 'administrator' );
+
+		$this->expectApplied( 'wp_new_relic_transactions_name' )
+		     ->once()
+		     ->with( 'homepage' );
+
+		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
+		     ->once()
+		     ->with( [
+				'HTTP_REFERER'    => '',
+				'HTTP_USER_AGENT' => '',
+				'HTTPS'           => true,
+				'logged-in'       => true,
+		     ] );
+
+		$this->with_https()->get( '/' );
+
+		$this->assertSame( 'homepage', $this->nr->name );
+		$this->assertTrue( $this->nr->params['HTTPS'] );
+		$this->assertTrue( $this->nr->params['logged-in'] );
 	}
 
 	public function test_page() {
