@@ -47,7 +47,7 @@ class WP_New_Relic_Transactions {
 		remove_action( 'rest_dispatch_request', 'wpcom_vip_rest_routes_for_newrelic' );
 		add_filter( 'rest_dispatch_request', [ $this, 'rest_routes' ], 10, 4 );
 		add_action( 'wp', [ $this, 'process_wp' ] );
-		add_filter( 'x_redirect_by', [ $this, 'redirects' ], PHP_INT_MAX, 3 );
+		add_filter( 'x_redirect_by', [ $this, 'process_redirect' ], PHP_INT_MAX, 3 );
 	}
 
 	/**
@@ -140,7 +140,7 @@ class WP_New_Relic_Transactions {
 	 * @param string       $location The redirect location.
 	 * @return string|false
 	 */
-	public function redirects( $x_redirect_by, $status, $location ) {
+	public function process_redirect( $x_redirect_by, $status, $location ) {
 		$this->name_transaction( sprintf( 'redirect.%s', $status ) );
 		$this->add_custom_parameters( [ 'redirect-location' => $location ] );
 
