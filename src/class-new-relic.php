@@ -44,4 +44,21 @@ class New_Relic implements With_New_Relic {
 	public function add_custom_parameter( string $key, bool|float|int|string $value ): bool {
 		return newrelic_add_custom_parameter( $key, $value );
 	}
+
+	/**
+	 * Marks the current transaction as a background job.
+	 *
+	 * @param bool $flag Whether to mark the current transaction as a background job.
+	 *                   If false is passed, the transaction is marked as a web transaction.
+	 */
+	public function background_job( bool $flag ): void {
+		newrelic_background_job( $flag );
+	}
+
+	/**
+	 * Ignore the current transaction in Apdex calculations.
+	 */
+	public function ignore_apdex(): void {
+		newrelic_ignore_apdex();
+	}
 }

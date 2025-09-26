@@ -3,7 +3,7 @@
  * Plugin Name: WP New Relic Transactions
  * Plugin URI: https://github.com/alleyinteractive/wp-new-relic-transactions
  * Description: A companion plugin when using New Relic with WordPress, to improve the recorded transaction data.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Matthew Boynes
  * Author URI: https://github.com/alleyinteractive/wp-new-relic-transactions
  * Requires at least: 5.9
@@ -40,6 +40,16 @@ function main(): void {
 	 * @param With_New_Relic $new_relic New Relic wrapper.
 	 */
 	$new_relic = apply_filters( 'wp_new_relic_transactions_wrapper', new New_Relic() );
+
+	if ( ! $new_relic instanceof With_New_Relic ) {
+		_doing_it_wrong(
+			__NAMESPACE__ . '\main',
+			esc_html__( 'The New Relic wrapper must implement the With_New_Relic interface.', 'wp-new-relic-transactions' ),
+			'0.2.0',
+		);
+
+		return;
+	}
 
 	// Create the core plugin object.
 	$plugin = new WP_New_Relic_Transactions( $new_relic );
