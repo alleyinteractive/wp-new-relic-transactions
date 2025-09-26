@@ -18,16 +18,16 @@ class RequestsTest extends TestCase {
 
 	public function test_homepage() {
 		$this->expectApplied( 'wp_new_relic_transactions_name' )
-		     ->once()
-		     ->with( 'homepage' );
+			->once()
+			->with( 'homepage' );
 		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
-		     ->once()
-		     ->with( [
+			->once()
+			->with( [
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => false,
 				'logged-in'      => false,
-		     ] );
+			] );
 		$this->get( '/' );
 
 		$this->assertSame( 'homepage', $this->nr->name );
@@ -37,17 +37,17 @@ class RequestsTest extends TestCase {
 		$post = static::factory()->post->create_and_get();
 
 		$this->expectApplied( 'wp_new_relic_transactions_name' )
-		     ->once()
-		     ->with( 'post' );
+			->once()
+			->with( 'post' );
 		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
-		     ->once()
-		     ->with( [
+			->once()
+			->with( [
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => false,
 				 'post_id'        => $post->ID,
 				 'logged-in'      => false,
-		     ] );
+			] );
 		$this->get( $post );
 
 		$this->assertSame( 'post', $this->nr->name );
@@ -58,17 +58,17 @@ class RequestsTest extends TestCase {
 		$this->acting_as( 'administrator' );
 
 		$this->expectApplied( 'wp_new_relic_transactions_name' )
-		     ->once()
-		     ->with( 'homepage' );
+			->once()
+			->with( 'homepage' );
 
 		$this->expectApplied( 'wp_new_relic_transactions_custom_parameters' )
-		     ->once()
-		     ->with( [
+			->once()
+			->with( [
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => true,
 				'logged-in'       => true,
-		     ] );
+			] );
 
 		$this->with_https()->get( '/' );
 
@@ -81,8 +81,8 @@ class RequestsTest extends TestCase {
 		$page = static::factory()->page->create_and_get();
 
 		$this->expectApplied( 'wp_new_relic_transactions_name' )
-		     ->once()
-		     ->with( 'post.page' );
+			->once()
+			->with( 'post.page' );
 		$this->get( $page );
 
 		$this->assertSame( 'post.page', $this->nr->name );
