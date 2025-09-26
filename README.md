@@ -8,14 +8,13 @@ Stable tag: 0.1.0
 
 Requires at least: 5.9
 
-Tested up to: 6.1
+Tested up to: 6.8
 
-Requires PHP: 8.0
+Requires PHP: 8.2
 
 License: GPL v2 or later
 
-[![Coding Standards](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/coding-standards.yml)
-[![Testing Suite](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/unit-test.yml/badge.svg)](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/unit-test.yml)
+[![All Pull Request Tests](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/all-pr-tests.yml/badge.svg)](https://github.com/alleyinteractive/wp-new-relic-transactions/actions/workflows/all-pr-tests.yml)
 
 A companion plugin when using New Relic with WordPress, to improve the recorded transaction data.
 

@@ -7,10 +7,7 @@
  * Author: Matthew Boynes
  * Author URI: https://github.com/alleyinteractive/wp-new-relic-transactions
  * Requires at least: 5.9
- * Tested up to: 6.1.1
- *
- * Text Domain: wp-new-relic-transactions
- * Domain Path: /languages/
+ * Tested up to: 6.8
  *
  * @package wp-new-relic-transactions
  */

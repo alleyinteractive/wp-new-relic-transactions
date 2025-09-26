@@ -4,7 +4,7 @@
  */
 
 // Load Composer dependencies.
-use Alley\WP_New_Relic_Transactions\Tests\Mock_New_Relic;
+use Alley\WP_New_Relic_Transactions\Tests\MockNewRelic;
 
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
@@ -17,7 +17,7 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 	->loaded( function() {
 		require_once __DIR__ . '/../plugin.php';
 
-		$GLOBALS['mock_new_relic'] = new Mock_New_Relic();
+		$GLOBALS['mock_new_relic'] = new MockNewRelic();
 
 		add_filter( 'wp_new_relic_transactions_wrapper', fn () => $GLOBALS['mock_new_relic'] );
 

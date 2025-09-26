@@ -15,13 +15,12 @@
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.2"
     },
     "require-dev": {
         "alleyinteractive/alley-coding-standards": "^2.0",
         "alleyinteractive/composer-wordpress-autoloader": "^1.0",
-        "mantle-framework/testkit": "^0.9",
-        "nunomaduro/collision": "^5.0"
+        "mantle-framework/testkit": "^1.5"
     },
     "config": {
         "allow-plugins": {
@@ -31,11 +30,9 @@
         },
         "sort-packages": true
     },
-    "extra": {
-        "wordpress-autoloader": {
-            "autoload-dev": {
-                "Alley\\WP_New_Relic_Transactions\\Tests\\": "tests"
-            }
+    "autoload-dev": {
+        "psr-4": {
+            "Alley\\WP_New_Relic_Transactions\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
@@ -44,6 +41,7 @@
         "phpcbf": "phpcbf .",
         "phpcs": "phpcs .",
         "phpunit": "phpunit",
+        "release": "npx @alleyinteractive/create-release@latest",
         "test": [
             "@phpcs",
             "@phpunit"

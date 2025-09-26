@@ -2,7 +2,7 @@
 
 namespace Alley\WP_New_Relic_Transactions\Tests;
 
-class Mock_New_Relic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
+class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 
 	public string $name;
 	public array $params = [];
