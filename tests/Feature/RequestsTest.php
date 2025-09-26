@@ -45,8 +45,8 @@ class RequestsTest extends TestCase {
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => false,
-				 'post_id'        => $post->ID,
-				 'logged-in'      => false,
+				'post_id'        => $post->ID,
+				'logged-in'      => false,
 			] );
 		$this->get( $post );
 
