@@ -119,8 +119,8 @@ class WP_New_Relic_Transactions {
 			$path = $GLOBALS['wp']->query_vars['rest_route'];
 			if ( preg_match( '@^' . $route . '@i', $path ) ) {
 				$name = $request->get_method() . ' ' . preg_replace(
-					'/\(\?P(<\w+?>).*?\)/',
-					'$1',
+					'/\(\?P<(\w+)>(?:[^()]*|\([^()]*\))*\)/',
+					'<$1>',
 					$route
 				);
 				$this->name_transaction( $name );
