@@ -118,11 +118,7 @@ class WP_New_Relic_Transactions {
 		) {
 			$path = $GLOBALS['wp']->query_vars['rest_route'];
 			if ( preg_match( '@^' . $route . '@i', $path ) ) {
-				$name = $request->get_method() . ' ' . preg_replace(
-					'/\(\?P(<\w+?>).*?\)/',
-					'$1',
-					$route
-				);
+				$name = $request->get_method() . ' ' . self::rest_route_to_transaction_name( $route );
 				$this->name_transaction( $name );
 				$this->add_custom_parameters(
 					array_merge(
@@ -323,5 +319,21 @@ class WP_New_Relic_Transactions {
 			'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? '',  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
 			'HTTPS'           => is_ssl(),
 		];
+	}
+
+	/**
+	 * Convert a REST route regex to a transaction name.
+	 *
+	 * E.g. `/wp/v2/posts/(?P<id>[\d]+)` becomes `/wp/v2/posts/<id>`
+	 *
+	 * @param string $route The REST route regex.
+	 * @return string The converted route as a string.
+	 */
+	public static function rest_route_to_transaction_name( string $route ): string {
+		return (string) preg_replace(
+			'/\(\?P<(\w+)>(?:[^()]*|\([^()]*\))*\)/',
+			'<$1>',
+			rtrim( $route, '?' ),
+		);
 	}
 }

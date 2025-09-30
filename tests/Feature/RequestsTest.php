@@ -2,6 +2,8 @@
 namespace Alley\WP_New_Relic_Transactions\Tests\Feature;
 
 use Alley\WP_New_Relic_Transactions\Tests\TestCase;
+use Alley\WP_New_Relic_Transactions\WP_New_Relic_Transactions;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
@@ -87,5 +89,63 @@ class RequestsTest extends TestCase {
 
 		$this->assertSame( 'post.page', $this->nr->name );
 		$this->assertSame( $page->ID, $this->nr->params['post_id'] );
+	}
+
+	#[DataProvider( 'rest_route_to_transaction_name_dataprovider' )]
+	public function test_rest_route_to_transaction_name( string $route, string $expected ): void {
+		$this->assertEquals(
+			$expected,
+			WP_New_Relic_Transactions::rest_route_to_transaction_name( $route )
+		);
+	}
+
+	public static function rest_route_to_transaction_name_dataprovider(): array {
+		return [
+			[
+				'/no-params/here',
+				'/no-params/here',
+			],
+			[
+				'/wp/v2/posts',
+				'/wp/v2/posts',
+			],
+			[
+				'/wp/v2/posts/(?P<id>[\d]+)',
+				'/wp/v2/posts/<id>',
+			],
+			[
+				'/vendor/v1.3/posts/ids/(?P<ids>(?:[^/]+))',
+				'/vendor/v1.3/posts/ids/<ids>',
+			],
+			[
+				'/vendor/v1.3/posts/ids/(?P<ids>(?:[^/]+))/count/(?P<count>(?:[^/]+))',
+				'/vendor/v1.3/posts/ids/<ids>/count/<count>',
+			],
+			[
+				'/complex/(?P<one>[^/]+)/(?P<two>[^/]+)/(?P<three>[^/]+)/end',
+				'/complex/<one>/<two>/<three>/end',
+			],
+
+			[
+				'/mixed/(?P<param1>[^/]+)/static/(?P<param2>[^/]+)',
+				'/mixed/<param1>/static/<param2>',
+			],
+			[
+				'/nested/(?P<outer>(?:[^/]+/)?(?P<inner>[^/]+))/end',
+				'/nested/<outer>/end',
+			],
+			[
+				'/complex-regex/(?P<param>[a-zA-Z0-9_-]{3,})',
+				'/complex-regex/<param>',
+			],
+			[
+				'/plugin/placement-strategy/(?P<player>(?:[^/]+))?',
+				'/plugin/placement-strategy/<player>',
+			],
+			[
+				'/(?P<path>(media))/(?P<endpoint>(?:[^/]+))?',
+				'/<path>/<endpoint>',
+			],
+		];
 	}
 }

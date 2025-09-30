@@ -2,6 +2,10 @@
 
 All notable changes to `WP New Relic Transactions` will be documented in this file.
 
+## 0.2.1
+
+- Adjust REST route parameter regex to handle nested parentheses.
+
 ## 0.2.0
 
 - Add redirect transaction naming.
