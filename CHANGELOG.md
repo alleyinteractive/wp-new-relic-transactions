@@ -2,6 +2,10 @@
 
 All notable changes to `WP New Relic Transactions` will be documented in this file.
 
+## 0.2.2
+
+- Bump version for plugin updates.
+
 ## 0.2.1
 
 - Adjust REST route parameter regex to handle nested parentheses.
