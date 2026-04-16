@@ -2,13 +2,20 @@
 namespace Alley\WP_New_Relic_Transactions\Tests\Feature;
 
 use Alley\WP_New_Relic_Transactions\Tests\TestCase;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use WP_REST_Response;
 
 /**
  * Tests for REST API route transaction naming.
  *
+ * Runs in separate processes because each test defines the REST_REQUEST constant,
+ * which cannot be redefined once set in PHP.
+ *
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
  */
+#[RunTestsInSeparateProcesses]
+#[PreserveGlobalState(false)]
 class RestApiTest extends TestCase {
 	/**
 	 * Mock New Relic instance for testing transaction naming.
@@ -27,9 +34,7 @@ class RestApiTest extends TestCase {
 		// REST_REQUEST must be defined for the plugin's rest_routes() to fire,
 		// since Mantle replaces rest_api_loaded() which is normally responsible
 		// for defining it.
-		if ( ! defined( 'REST_REQUEST' ) ) {
-			define( 'REST_REQUEST', true );
-		}
+		define( 'REST_REQUEST', true );
 
 		// Register test REST routes. These callbacks run when Mantle fires
 		// rest_api_init() during each request's replace_rest_api() call.
