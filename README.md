@@ -4,7 +4,7 @@ Contributors: mboynes
 
 Tags: alleyinteractive, wp-new-relic-transactions
 
-Stable tag: 0.2.2
+Stable tag: 0.3.0
 
 Requires at least: 6.5
 
