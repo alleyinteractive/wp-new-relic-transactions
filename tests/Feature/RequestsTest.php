@@ -14,7 +14,7 @@ class RequestsTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['wp_new_relic_transactions_plugin']->named = false;
-		$this->nr = $GLOBALS['mock_new_relic'];
+		$this->nr = $GLOBALS['wp_new_relic_transactions_mock'];
 		$this->nr->reset();
 	}
 
@@ -28,7 +28,7 @@ class RequestsTest extends TestCase {
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => false,
-				'logged-in'      => false,
+				'logged-in'       => false,
 			] );
 		$this->get( '/' );
 
@@ -47,8 +47,8 @@ class RequestsTest extends TestCase {
 				'HTTP_REFERER'    => '',
 				'HTTP_USER_AGENT' => '',
 				'HTTPS'           => false,
-				'post_id'        => $post->ID,
-				'logged-in'      => false,
+				'post_id'         => $post->ID,
+				'logged-in'       => false,
 			] );
 		$this->get( $post );
 
