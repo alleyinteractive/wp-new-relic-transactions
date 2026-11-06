@@ -7,7 +7,7 @@
  * Author: Matthew Boynes
  * Author URI: https://github.com/alleyinteractive/wp-new-relic-transactions
  * Requires at least: 6.5
- * Requires PHP: 8.4
+ * Requires PHP: 8.3
  * Tested up to: 7.1
  *
  * @package wp-new-relic-transactions
