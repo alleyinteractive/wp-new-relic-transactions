@@ -6,11 +6,11 @@ Tags: alleyinteractive, wp-new-relic-transactions
 
 Stable tag: 0.2.2
 
-Requires at least: 5.9
+Requires at least: 6.5
 
-Tested up to: 6.8
+Tested up to: 7.1
 
-Requires PHP: 8.2
+Requires PHP: 8.4
 
 License: GPL v2 or later
 
