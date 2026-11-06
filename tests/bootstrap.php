@@ -1,6 +1,6 @@
 <?php
 /**
- * wp-new-relic-transactions Test Bootstrap
+ * WP New Relic Transactions test bootstrap
  */
 
 // Load Composer dependencies.
@@ -14,15 +14,15 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 \Mantle\Testing\manager()
 	->maybe_rsync_plugin()
 	// Load the main file of the plugin.
-	->loaded( function() {
+	->loaded( function () {
 		require_once __DIR__ . '/../plugin.php';
 
-		$GLOBALS['mock_new_relic'] = new MockNewRelic();
+		$GLOBALS['wp_new_relic_transactions_mock'] = new MockNewRelic();
 
-		add_filter( 'wp_new_relic_transactions_wrapper', fn () => $GLOBALS['mock_new_relic'] );
+		add_filter( 'wp_new_relic_transactions_wrapper', fn () => $GLOBALS['wp_new_relic_transactions_mock'] );
 
 		// Load the plugin class into a global so the tests can manipulate it.
-		add_action( 'wp_new_relic_transactions_init', function( $plugin ) {
+		add_action( 'wp_new_relic_transactions_init', function ( $plugin ) {
 			$GLOBALS['wp_new_relic_transactions_plugin'] = $plugin;
 		} );
 	} )

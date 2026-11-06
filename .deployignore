@@ -13,6 +13,7 @@ tests
 bin
 composer.lock
 .phpcs.xml
+phpstan.neon
 phpunit.xml
 configure.php
 DOCKER_ENV

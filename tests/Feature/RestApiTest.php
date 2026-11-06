@@ -15,7 +15,7 @@ use WP_REST_Response;
  * Visit {@see https://mantle.alley.co/testing/test-framework.html} to learn more.
  */
 #[RunTestsInSeparateProcesses]
-#[PreserveGlobalState(false)]
+#[PreserveGlobalState( false )]
 class RestApiTest extends TestCase {
 	/**
 	 * Mock New Relic instance for testing transaction naming.
@@ -28,13 +28,13 @@ class RestApiTest extends TestCase {
 		parent::setUp();
 
 		$GLOBALS['wp_new_relic_transactions_plugin']->named = false;
-		$this->nr = $GLOBALS['mock_new_relic'];
+		$this->nr = $GLOBALS['wp_new_relic_transactions_mock'];
 		$this->nr->reset();
 
 		// REST_REQUEST must be defined for the plugin's rest_routes() to fire,
 		// since Mantle replaces rest_api_loaded() which is normally responsible
 		// for defining it.
-		define( 'REST_REQUEST', true );
+		define( 'REST_REQUEST', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- core constant.
 
 		// Register test REST routes. These callbacks run when Mantle fires
 		// rest_api_init() during each request's replace_rest_api() call.

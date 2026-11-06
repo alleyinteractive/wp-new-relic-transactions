@@ -5,18 +5,18 @@ namespace Alley\WP_New_Relic_Transactions\Tests;
 class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 
 	public string $name;
-	public array $params = [];
+	public array $params           = [];
 	public bool $is_background_job = false;
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public function is_supported(): bool {
 		return true;
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public function name_transaction( string $name ): bool {
 		$this->name = $name;
@@ -24,7 +24,7 @@ class MockNewRelic implements \Alley\WP_New_Relic_Transactions\With_New_Relic {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public function add_custom_parameter( string $key, float|bool|int|string $value ): bool {
 		$this->params[ $key ] = $value;
