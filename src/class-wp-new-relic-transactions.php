@@ -9,6 +9,7 @@ namespace Alley\WP_New_Relic_Transactions;
 
 use WP;
 use WP_Post;
+use WP_Post_Type;
 use WP_REST_Request;
 use WP_Term;
 
@@ -45,7 +46,7 @@ class WP_New_Relic_Transactions {
 		}
 
 		remove_action( 'rest_dispatch_request', 'wpcom_vip_rest_routes_for_newrelic' );
-		add_filter( 'rest_dispatch_request', [ $this, 'rest_routes' ], 10, 4 );
+		add_filter( 'rest_dispatch_request', [ $this, 'rest_routes' ], 10, 3 );
 		add_action( 'wp', [ $this, 'process_wp' ] );
 		add_filter( 'x_redirect_by', [ $this, 'process_redirect' ], PHP_INT_MAX, 3 );
 
@@ -75,18 +76,22 @@ class WP_New_Relic_Transactions {
 	/**
 	 * Add custom parameters to the new relic transaction.
 	 *
-	 * @param array $params Custom params as key => value pairs.
+	 * @param array<string, mixed> $params Custom params as key => value pairs.
 	 * @return bool Returns true if all parameters were added successfully.
 	 */
 	public function add_custom_parameters( array $params ): bool {
 		/**
 		 * Filter the custom params before setting them.
 		 *
-		 * @param array $params Custom params, as key => value pairs.
+		 * @param array<string, mixed> $params Custom params, as key => value pairs.
 		 */
 		$params = apply_filters( 'wp_new_relic_transactions_custom_parameters', $params );
 		$result = true;
 		foreach ( $params as $key => $value ) {
+			if ( ! is_scalar( $value ) ) {
+				continue;
+			}
+
 			$result = $this->new_relic->add_custom_parameter( $key, $value ) && $result;
 		}
 
@@ -110,13 +115,16 @@ class WP_New_Relic_Transactions {
 	 * @return mixed Unaltered `$dispatch_result`.
 	 */
 	public function rest_routes( $dispatch_result, $request, $route ) {
+		$wp   = $GLOBALS['wp'] ?? null;
+		$path = $wp instanceof WP ? ( $wp->query_vars['rest_route'] ?? '' ) : '';
+
 		if (
 			! $this->named
 			&& defined( 'REST_REQUEST' )
 			&& true === REST_REQUEST
-			&& ! empty( $GLOBALS['wp']->query_vars['rest_route'] )
+			&& is_string( $path )
+			&& '' !== $path
 		) {
-			$path = $GLOBALS['wp']->query_vars['rest_route'];
 			if ( preg_match( '@^' . $route . '@i', $path ) ) {
 				$name = $request->get_method() . ' ' . self::rest_route_to_transaction_name( $route );
 				$this->name_transaction( $name );
@@ -181,7 +189,7 @@ class WP_New_Relic_Transactions {
 		switch ( true ) {
 			case is_feed():
 				$feed_type = get_query_var( 'feed' );
-				if ( 'feed' !== $feed_type ) {
+				if ( is_string( $feed_type ) && 'feed' !== $feed_type ) {
 					$name = "feed.{$feed_type}";
 				} else {
 					$name = 'feed';
@@ -208,7 +216,11 @@ class WP_New_Relic_Transactions {
 				$name = 'privacy_policy';
 				break;
 			case is_post_type_archive():
-				$name = 'archive.post_type.' . get_query_var( 'post_type' );
+				$name      = 'archive.post_type';
+				$post_type = get_queried_object();
+				if ( $post_type instanceof WP_Post_Type ) {
+					$name .= ".{$post_type->name}";
+				}
 				break;
 			case is_tax():
 			case is_category():
@@ -287,7 +299,8 @@ class WP_New_Relic_Transactions {
 		}
 
 		if ( class_exists( \WP_CLI::class ) ) {
-			$wp_cli_arguments = \WP_CLI::get_runner()->arguments ?? null;
+			$runner           = \WP_CLI::get_runner();
+			$wp_cli_arguments = is_object( $runner ) && property_exists( $runner, 'arguments' ) ? $runner->arguments : null;
 
 			if ( ! empty( $wp_cli_arguments ) ) {
 				if ( ! is_array( $wp_cli_arguments ) ) {
@@ -296,7 +309,7 @@ class WP_New_Relic_Transactions {
 
 				array_unshift( $wp_cli_arguments, 'wp' );
 
-				$cmd = implode( ' ', $wp_cli_arguments );
+				$cmd = implode( ' ', array_filter( $wp_cli_arguments, 'is_string' ) );
 
 				$this->add_custom_parameters( [ 'wp-cli-cmd' => $cmd ] );
 			}
@@ -314,9 +327,12 @@ class WP_New_Relic_Transactions {
 	 * @return array<string, bool|string>
 	 */
 	protected function get_default_parameters(): array {
+		$referer    = $_SERVER['HTTP_REFERER'] ?? '';        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+
 		return [
-			'HTTP_REFERER'    => $_SERVER['HTTP_REFERER'] ?? '',        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? '',  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+			'HTTP_REFERER'    => is_string( $referer ) ? $referer : '',
+			'HTTP_USER_AGENT' => is_string( $user_agent ) ? $user_agent : '',
 			'HTTPS'           => is_ssl(),
 		];
 	}

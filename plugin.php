@@ -21,8 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Root directory to this plugin.
- *
- * @var string
  */
 define( 'WP_NEW_RELIC_TRANSACTIONS_DIR', __DIR__ );
 
@@ -42,6 +40,7 @@ function main(): void {
 	 */
 	$new_relic = apply_filters( 'wp_new_relic_transactions_wrapper', new New_Relic() );
 
+	// @phpstan-ignore instanceof.alwaysTrue (filters can return any type at runtime)
 	if ( ! $new_relic instanceof With_New_Relic ) {
 		_doing_it_wrong(
 			__NAMESPACE__ . '\main',
